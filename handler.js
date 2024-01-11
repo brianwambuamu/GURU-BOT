@@ -219,8 +219,9 @@ export async function handler(chatUpdate) {
                 await delay(time)
             }, time)
         }
-         if (process.env.PRIVATE && !(isROwner || isOwner))
-            return
+         if (process.env.MODE && process.env.MODE.toLowerCase() === 'private' && !(isROwner || isOwner))
+          return;
+
         
         if (m.isBaileys)
             return
@@ -556,7 +557,7 @@ export async function participantsUpdate({
                   let nthMember = groupMetadata.participants.length;
                   let secondText = `Welcome, ${await this.getName(user)}, our ${nthMember}th member`;
           
-                  let welcomeApiUrl = `https://wecomeapi.onrender.com/welcome-image?username=${encodeURIComponent(
+                  let welcomeApiUrl = `https://welcome.guruapi.tech/welcome-image?username=${encodeURIComponent(
                     await this.getName(user)
                   )}&guildName=${encodeURIComponent(await this.getName(id))}&guildIcon=${encodeURIComponent(
                     ppgp
@@ -578,7 +579,7 @@ export async function participantsUpdate({
                         title: "ᴛʜᴇ ɢᴜʀᴜ-ʙᴏᴛ",
                         body: "welcome to Group",
                         thumbnailUrl: welcomeApiUrl,
-                        sourceUrl: 'https://chat.whatsapp.com/F3sB3pR3tClBvVmlIkqDJp',
+                        sourceUrl: 'https://chat.whatsapp.com/BFfD1C0mTDDDfVdKPkxRAA',
                         mediaType: 1,
                         renderLargerThumbnail: true
                         }}})
@@ -609,7 +610,7 @@ export async function participantsUpdate({
                   let nthMember = groupMetadata.participants.length;
                   let secondText = `Goodbye, our ${nthMember}th group member`;
           
-                  let leaveApiUrl = `https://wecomeapi.onrender.com/leave-image?username=${encodeURIComponent(
+                  let leaveApiUrl = `https://welcome.guruapi.tech/leave-image?username=${encodeURIComponent(
                     await this.getName(user)
                   )}&guildName=${encodeURIComponent(await this.getName(id))}&guildIcon=${encodeURIComponent(
                     ppgp
@@ -631,7 +632,7 @@ export async function participantsUpdate({
                         title: "ᴛʜᴇ ɢᴜʀᴜ-ʙᴏᴛ",
                         body: "Goodbye from  Group",
                         thumbnailUrl: leaveApiUrl,
-                        sourceUrl: 'https://chat.whatsapp.com/F3sB3pR3tClBvVmlIkqDJp',
+                        sourceUrl: 'https://chat.whatsapp.com/BFfD1C0mTDDDfVdKPkxRAA',
                         mediaType: 1,
                         renderLargerThumbnail: true
                         }}})
@@ -721,6 +722,11 @@ Delete Chat
  */
 export async function deleteUpdate(message) {
     try {
+        
+       
+      if (typeof process.env.antidelete === 'undefined' || process.env.antidelete.toLowerCase() === 'false') return;
+
+
         const {
             fromMe,
             id,
@@ -732,8 +738,7 @@ export async function deleteUpdate(message) {
         if (!msg)
             return
         let chat = global.db.data.chats[msg.chat] || {}
-        if (chat.antiDelete)
-            return
+       
             await this.reply(msg.chat, `
             ≡ deleted a message 
             ┌─⊷  𝘼𝙉𝙏𝙄 𝘿𝙀𝙇𝙀𝙏𝙀 
